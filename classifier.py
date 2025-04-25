@@ -39,7 +39,4 @@ class ForwardNueralNetwork(nn.Module):
         self.l2 =nn.Linear(hidden_size, num_classes)
     
     def forward(self, x):
-        out = self.l1(x)
-        out = self.relu(out)
-
-        return self.l2(  self.relu( ) )
+        return self.l2(  self.relu( self.l1(x) ) )
