@@ -20,6 +20,7 @@ LABELS = ['T-shirts/ top', 'Trouser', 'Pullover', 'Dress','Coat','Sandal','Shirt
 
 def main():
     
+    print("Loading dataset...")
     train_data = datasets.FashionMNIST(Data_DIR, train = True, download = False, transform = transforms.ToTensor())
     test_data = datasets.FashionMNIST(Data_DIR, train = False, download = False, transform = transforms.ToTensor())
     
@@ -29,3 +30,16 @@ def main():
 
 if __name__ == "__main__":
     main()
+
+class ForwardNueralNetwork(nn.Module):
+    def _init_(self,input_size, hidden_size, num_classes):
+        super(ForwardNueralNetwork,self).__init__()
+        self.l1 = nn.Linear(input_size, hidden_size )
+        self.relu = nn.ReLU()
+        self.l2 =nn.Linear(hidden_size, num_classes)
+    
+    def forward(self, x):
+        out = self.l1(x)
+        out = self.relu(out)
+
+        return self.l2(  self.relu( ) )
