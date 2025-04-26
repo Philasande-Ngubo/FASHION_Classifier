@@ -11,7 +11,7 @@ import torchvision.transforms as transforms
 INPUT_SIZE = 784
 HIDDEN_SIZE = 400
 NUM_CLASSES = 10
-NUM_EPOCHS = 15
+NUM_EPOCHS = 2
 LEARNING_RATE = 0.001
 BATCH_SIZE = 100
 Data_DIR = "."
@@ -30,24 +30,7 @@ class ForwardNueralNetwork(nn.Module):
         return self.l2(  self.relu( self.l1(x) ) )
 
 def train_model(model, train_loader, test_loader, criterion, optimizer):
-    pass
-
-def main():
-    
-    print("Loading dataset...")
-    train_data = datasets.FashionMNIST(Data_DIR, train = True, download = False, transform = transforms.ToTensor())
-    test_data = datasets.FashionMNIST(Data_DIR, train = False, download = False, transform = transforms.ToTensor())
-    
-    train_loader = torch.utils.data.DataLoader( dataset=train_data,batch_size=BATCH_SIZE, shuffle= True)
-    test_loader = torch.utils.data.DataLoader( dataset=test_data,batch_size=BATCH_SIZE, shuffle= False)
-
-    model = ForwardNueralNetwork(INPUT_SIZE, HIDDEN_SIZE, NUM_CLASSES)
-
-    criterion = nn.CrossEntropyLoss()
-    optimizer = torch.optim.Adam(model.parameters(), lr = LEARNING_RATE)
-
-    # training 
-    n_steps = len(train_loader)
+    n_steps = len(train_loader)                     
     for epoch in range(NUM_EPOCHS):
         print(f'Epoch {epoch +1} of {NUM_EPOCHS}')
         for i, (x, true_labels) in enumerate(train_loader):
@@ -64,6 +47,25 @@ def main():
 
             if ((i+1) % 200 == 0):
                 print(f'  Loss = {loss.item():.4f}')
+
+def main():
+    
+    print("Loading dataset...")
+    train_data = datasets.FashionMNIST(Data_DIR, train = True, download = False, transform = transforms.ToTensor())
+    test_data = datasets.FashionMNIST(Data_DIR, train = False, download = False, transform = transforms.ToTensor())
+    
+    train_loader = torch.utils.data.DataLoader( dataset=train_data,batch_size=BATCH_SIZE, shuffle= True)
+    test_loader = torch.utils.data.DataLoader( dataset=test_data,batch_size=BATCH_SIZE, shuffle= False)
+
+    model = ForwardNueralNetwork(INPUT_SIZE, HIDDEN_SIZE, NUM_CLASSES)
+
+    criterion = nn.CrossEntropyLoss()
+    optimizer = torch.optim.Adam(model.parameters(), lr = LEARNING_RATE)
+
+    train_model(model = model , train_loader = train_loader, test_loader=test_loader, criterion=criterion, optimizer=optimizer)
+
+    # training 
+    
     
     with torch.no_grad():
         num_correct_predictions = 0
