@@ -29,7 +29,7 @@ class ForwardNueralNetwork(nn.Module):
     def forward(self, x):
         return self.l2(  self.relu( self.l1(x) ) )
 
-def train_model(model, train_loader, test_loader, criterion, optimizer):
+def train_model(model, train_loader, criterion, optimizer):
     n_steps = len(train_loader)                     
     for epoch in range(NUM_EPOCHS):
         print(f'Epoch {epoch +1} of {NUM_EPOCHS}')
@@ -48,6 +48,9 @@ def train_model(model, train_loader, test_loader, criterion, optimizer):
             if ((i+1) % 200 == 0):
                 print(f'  Loss = {loss.item():.4f}')
 
+def model_accuraccy(model, test_loader):
+    pass
+    
 def main():
     
     print("Loading dataset...")
@@ -62,7 +65,7 @@ def main():
     criterion = nn.CrossEntropyLoss()
     optimizer = torch.optim.Adam(model.parameters(), lr = LEARNING_RATE)
 
-    train_model(model = model , train_loader = train_loader, test_loader=test_loader, criterion=criterion, optimizer=optimizer)
+    train_model(model = model , train_loader = train_loader, criterion=criterion, optimizer=optimizer)
 
     # training 
     
