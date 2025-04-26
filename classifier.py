@@ -48,9 +48,23 @@ def train_model(model, train_loader, criterion, optimizer):
             if ((i+1) % 200 == 0):
                 print(f'  Loss = {loss.item():.4f}')
 
-def model_accuraccy(model, test_loader):
-    pass
+def model_accuracy(model, test_loader):
+    with torch.no_grad():
+        num_correct_predictions = 0
+        testing_data_size = 0
+        for i, (x, true_labels) in enumerate(test_loader):
+             x = x.reshape(-1, 28*28).to(DEVICE)
+             true_labels = true_labels.to(DEVICE)
+
+             predicted_labels = model(x)
+
+             _, predictions = torch.max(predicted_labels, 1)
+             testing_data_size += true_labels.shape[0]
+             num_correct_predictions += (predictions == true_labels).sum().item()
+        
+        return 100.0 * ( num_correct_predictions/ testing_data_size)
     
+        
 def main():
     
     print("Loading dataset...")
@@ -67,28 +81,9 @@ def main():
 
     train_model(model = model , train_loader = train_loader, criterion=criterion, optimizer=optimizer)
 
-    # training 
+    model_accuracy = model_accuracy(model = model, test_loader =test_loader)
+    print(model_accuracy)
     
-    
-    with torch.no_grad():
-        num_correct_predictions = 0
-        testing_data_size = 0
-        for i, (x, true_labels) in enumerate(test_loader):
-             x = x.reshape(-1, 28*28).to(DEVICE)
-             true_labels = true_labels.to(DEVICE)
-
-             predicted_labels = model(x)
-
-             _, predictions = torch.max(predicted_labels, 1)
-             testing_data_size += true_labels.shape[0]
-             num_correct_predictions += (predictions == true_labels).sum().item()
-        
-        model_accuracy = 100.0 * ( num_correct_predictions/ testing_data_size)
-        print(f'Model accurracy {model_accuracy:.2f}%')
-
-
-
-
 
 if __name__ == "__main__":
     main()
