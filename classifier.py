@@ -7,11 +7,12 @@ import torch
 import torch.nn as nn
 from torchvision import datasets
 import torchvision.transforms as transforms
+import os
 
 INPUT_SIZE = 784
 HIDDEN_SIZE = 400
 NUM_CLASSES = 10
-NUM_EPOCHS = 2
+NUM_EPOCHS = 1
 LEARNING_RATE = 0.001
 BATCH_SIZE = 100
 Data_DIR = "."
@@ -69,6 +70,12 @@ def program(model):
 
     while ( user_input.lower() != "exit"):
         user_input = input("Please enter a filepath:\n> ")
+
+        if ( user_input.lower() != "exit"):
+            if os.path.exists(user_input):
+                pass
+            else:
+                print("File",user_input,"does exist.")
         print()
 
 def main():
