@@ -64,6 +64,8 @@ def model_accuracy(model, test_loader):
         
         return 100.0 * ( num_correct_predictions/ testing_data_size)
     
+def program(model):
+    pass
         
 def main():
     
@@ -79,10 +81,13 @@ def main():
     criterion = nn.CrossEntropyLoss()
     optimizer = torch.optim.Adam(model.parameters(), lr = LEARNING_RATE)
 
+    print("Training model...\n")
     train_model(model = model , train_loader = train_loader, criterion=criterion, optimizer=optimizer)
 
-    model_accuracy = model_accuracy(model = model, test_loader =test_loader)
-    print(model_accuracy)
+    accuracy = model_accuracy(model = model, test_loader =test_loader)
+    print(f'Model Accuracy :{accuracy:.2f}%\n')
+
+
     
 
 if __name__ == "__main__":
