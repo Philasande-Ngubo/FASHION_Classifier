@@ -65,8 +65,12 @@ def model_accuracy(model, test_loader):
         return 100.0 * ( num_correct_predictions/ testing_data_size)
     
 def program(model):
-    pass
-        
+    user_input = ""
+
+    while ( user_input.lower() != "exit"):
+        user_input = input("Please enter a filepath:\n> ")
+        print()
+
 def main():
     
     print("Loading dataset...")
@@ -87,8 +91,8 @@ def main():
     accuracy = model_accuracy(model = model, test_loader =test_loader)
     print(f'Model Accuracy :{accuracy:.2f}%\n')
 
+    program(model)
 
-    
 
 if __name__ == "__main__":
     main()
