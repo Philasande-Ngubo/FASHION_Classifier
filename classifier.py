@@ -9,16 +9,27 @@ from torchvision import datasets
 import torchvision.transforms as transforms
 
 INPUT_SIZE = 784
-HIDDEN_SIZE = 100
+HIDDEN_SIZE = 400
 NUM_CLASSES = 10
-NUM_EPOCHS = 3
+NUM_EPOCHS = 15
 LEARNING_RATE = 0.001
-BATCH_SIZE = 32
+BATCH_SIZE = 100
 Data_DIR = "."
 DEVICE = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 LABELS = ['T-shirts/ top', 'Trouser', 'Pullover', 'Dress','Coat','Sandal','Shirt','Sneaker', 'Bag', 'Ankle boot']
 
-def train_model(model):
+
+class ForwardNueralNetwork(nn.Module):
+    def __init__(self,input_size, hidden_size, num_classes):
+        super(ForwardNueralNetwork,self).__init__()
+        self.l1 = nn.Linear(input_size, hidden_size )
+        self.relu = nn.ReLU()
+        self.l2 =nn.Linear(hidden_size, num_classes)
+    
+    def forward(self, x):
+        return self.l2(  self.relu( self.l1(x) ) )
+
+def train_model(model, train_loader, test_loader, criterion, optimizer):
     pass
 
 def main():
@@ -38,6 +49,7 @@ def main():
     # training 
     n_steps = len(train_loader)
     for epoch in range(NUM_EPOCHS):
+        print(f'Epoch {epoch +1} of {NUM_EPOCHS}')
         for i, (x, true_labels) in enumerate(train_loader):
             x = x.reshape(-1, 28*28).to(DEVICE)
             true_labels = true_labels.to(DEVICE)
@@ -46,12 +58,12 @@ def main():
             loss = criterion(predicted_labels, true_labels)
 
             optimizer.zero_grad()
-            loss.backwards()   #back propagation
+            loss.backward()   #back propagation
 
             optimizer.step()
 
-            if ((i+1) % HIDDEN_SIZE == 0):
-                print(f'Epoch {epoch} of {NUM_EPOCHS} , Loss = {loss.item():.4f}')
+            if ((i+1) % 200 == 0):
+                print(f'  Loss = {loss.item():.4f}')
     
     with torch.no_grad():
         num_correct_predictions = 0
@@ -76,12 +88,3 @@ def main():
 if __name__ == "__main__":
     main()
 
-class ForwardNueralNetwork(nn.Module):
-    def _init_(self,input_size, hidden_size, num_classes):
-        super(ForwardNueralNetwork,self).__init__()
-        self.l1 = nn.Linear(input_size, hidden_size )
-        self.relu = nn.ReLU()
-        self.l2 =nn.Linear(hidden_size, num_classes)
-    
-    def forward(self, x):
-        return self.l2(  self.relu( self.l1(x) ) )
