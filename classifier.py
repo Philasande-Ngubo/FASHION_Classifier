@@ -4,15 +4,16 @@
 
 import numpy as np
 import torch
+import torchvision
 import torch.nn as nn
 from torchvision import datasets
 import torchvision.transforms as transforms
 import os
 
 INPUT_SIZE = 784
-HIDDEN_SIZE = 400
+HIDDEN_SIZE = 100
 NUM_CLASSES = 10
-NUM_EPOCHS = 1
+NUM_EPOCHS = 10
 LEARNING_RATE = 0.001
 BATCH_SIZE = 100
 Data_DIR = "."
@@ -73,7 +74,20 @@ def program(model):
 
         if ( user_input.lower() != "exit"):
             if os.path.exists(user_input):
-                pass
+
+                img = torchvision.io.read_image(user_input, mode=torchvision.io.ImageReadMode.GRAY)
+                img = img.squeeze()
+
+                img = img.reshape(-1).float()
+                img = img.to(DEVICE)
+
+                model.eval()  # Set the model to evaluation mode
+                with torch.no_grad():
+                    output = model(img)
+                    _, predicted_class = torch.max(output, 0)
+
+                print(f"Classifier: {LABELS[predicted_class.item()]}")
+
             else:
                 print("File",user_input,"does exist.")
         print()
@@ -99,7 +113,6 @@ def main():
     print(f'Model Accuracy :{accuracy:.2f}%\n')
 
     program(model)
-
 
 if __name__ == "__main__":
     main()
