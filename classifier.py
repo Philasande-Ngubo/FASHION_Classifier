@@ -95,7 +95,7 @@ def program(model):
 def main():
     
     print("Loading dataset...")
-    train_data = datasets.FashionMNIST(Data_DIR, train = True, download = False, transform = transforms.ToTensor())
+    train_data = datasets.FashionMNIST(Data_DIR, train = True, download = True, transform = transforms.ToTensor())
     test_data = datasets.FashionMNIST(Data_DIR, train = False, download = False, transform = transforms.ToTensor())
     
     train_loader = torch.utils.data.DataLoader( dataset=train_data,batch_size=BATCH_SIZE, shuffle= True)
